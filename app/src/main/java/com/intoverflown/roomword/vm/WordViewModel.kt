@@ -30,18 +30,18 @@ class WordViewModel(private val repository: WordRepository) : ViewModel() {
     }
 }
 
-///**
-// * Step 7. WordViewModelFactory
-// * - VM are not independent hence they require VM Factory to survive configuration changes and even
-//    if the Activity is recreated.
-// * - This "ViewModelProvider.Factory" framework will take care of the lifecycle of the ViewModel.
-// */
-//class WordViewModelFactory(private val repository: WordRepository) : ViewModelProvider.Factory {
-//    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-//        if (modelClass.isAssignableFrom(WordViewModel::class.java)) {
-//            @Suppress("UNCHECKED_CAST")
-//            return WordViewModel(repository) as T
-//        }
-//        throw IllegalArgumentException("Unknown ViewModel class")
-//    }
-//}
+/**
+ * Step 7. WordViewModelFactory
+ * - VM are not independent hence they require VM Factory to survive configuration changes and even
+    if the Activity is recreated.
+ * - This "ViewModelProvider.Factory" framework will take care of the lifecycle of the ViewModel.
+ */
+class WordViewModelFactory(private val repository: WordRepository) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(WordViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return WordViewModel(repository) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+}
