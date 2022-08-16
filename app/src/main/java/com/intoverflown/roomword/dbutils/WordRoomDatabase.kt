@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.intoverflown.roomword.entity.Word
+import kotlinx.coroutines.CoroutineScope
 
 /**
  * Step 4. Implement the Room database
@@ -23,7 +24,11 @@ abstract class WordRoomDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE : WordRoomDatabase? = null
 
-        fun getDatabase(context: Context) : WordRoomDatabase {
+        // To launch a coroutine you need a CoroutineScope
+        fun getDatabase(
+            context: Context,
+            scope: CoroutineScope
+        ) : WordRoomDatabase {
             // If the INSTANCE is not null, then return it, if it is, then create the database
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
