@@ -15,6 +15,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding!!.root)
 
+        /**
+         * Step 8. Add a RecyclerView
+         * - Have WordListAdapter class that extends ListAdapter.
+         * - The ViewHolder inside WordListAdapter will display each word in our list.
+         */
         val adapter = WordListAdapter()
         binding!!.recyclerview.adapter = adapter
         binding!!.recyclerview.layoutManager = LinearLayoutManager(this)
