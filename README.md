@@ -17,3 +17,6 @@ Annotated class that describes a database table when working with Room.
 Simplifies database work and serves as an access point to the underlying SQLite database (hides `SQLiteOpenHelper`). The Room database uses the DAO to issue queries to the SQLite database.
 * **SQLite database:** On device storage. The Room persistence library creates and maintains this database for you.
 * **DAO:** Data access object. A mapping of SQL queries to functions. When you use a DAO, you call the methods, and Room takes care of the rest.
+
+## Flow of Data for Automatic UI Updates (Reactive UI)
+The automatic update is possible because you are using LiveData. In the `MainActivity`, there is an `Observer` that observes the words LiveData from the database and is notified when they change. When there is a change, the observer's `onChange()` method is executed and updates `mWords` in the `WordListAdapter`.
