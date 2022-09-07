@@ -43,11 +43,12 @@ class MainActivity : AppCompatActivity() {
         binding!!.recyclerview.adapter = adapter
         binding!!.recyclerview.layoutManager = LinearLayoutManager(this)
 
-        // Add an observer on the LiveData returned by getAlphabetizedWords.
-        // The onChanged() method fires when the observed data changes and the activity is in the foreground.
+        /**
+         * 12.1 Connect with the data: Add an observer on the LiveData returned by getAlphabetizedWords.
+         * The onChanged() method fires when the observed data changes and the activity is in the foreground.
+         */
         wordViewModel.allWords.observe(this) { words ->
-            // Update the cached copy of the words in the adapter.
-            words.let { adapter.submitList(it) }
+            words.let { adapter.submitList(it) } // Update the cached copy of the words in the adapter.
         }
 
         // Call add New word Activity
@@ -57,7 +58,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * 12.1 Connect with the data: Add the onActivityResult() code for the NewWordActivity.
+     * 12.2 Connect with the data: Add the onActivityResult() code for the NewWordActivity.
      * - If the activity returns with RESULT_OK, insert the returned word into the database by
      * calling the insert() method of the WordViewModel
      */
