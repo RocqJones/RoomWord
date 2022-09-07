@@ -13,8 +13,8 @@ import kotlinx.coroutines.SupervisorJob
  */
 class WordsApplication : Application() {
     // No need to cancel this scope as it'll be torn down with the process
-    val applicationScope = CoroutineScope(SupervisorJob())
+    private val applicationScope = CoroutineScope(SupervisorJob())
 
-    val database by lazy { WordRoomDatabase.getDatabase(this, applicationScope) }
+    private val database by lazy { WordRoomDatabase.getDatabase(this, applicationScope) }
     val repository by lazy { WordRepository(database.wordDao()) }
 }
