@@ -4,8 +4,10 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.intoverflown.roomword.entity.Word
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 /**
  * Step 4. Implement the Room database
@@ -35,13 +37,45 @@ abstract class WordRoomDatabase : RoomDatabase() {
                     context.applicationContext,
                     WordRoomDatabase::class.java,
                     "word_database"
-                ).build()
+                ).addCallback(WordDatabaseCallback(scope))
+                    .build()
 
                 INSTANCE = instance
 
                 // return instance
                 instance
             }
+        }
+    }
+
+    /**
+     * 10. custom implementation of the RoomDatabase.Callback().
+     * - Gets a CoroutineScope as constructor parameter & override the onCreate method to populate the database.
+     * - Add the callback to the database build sequence right before calling .build() on the Room.databaseBuilder()
+     */
+    class WordDatabaseCallback(private val scope: CoroutineScope) : RoomDatabase.Callback() {
+
+        override fun onCreate(db: SupportSQLiteDatabase) {
+            super.onCreate(db)
+            INSTANCE?.let { database ->
+                scope.launch {
+                    populateDatabase(database.wordDao())
+                }
+            }
+        }
+
+        private suspend fun populateDatabase(wordDao: WordDao) {
+            // delete content
+            wordDao.deleteAll()
+
+            // Add sample words.
+            var word = Word(0,"Hello")
+            wordDao.insert(word)
+            word = Word(0,"World!")
+            wordDao.insert(word)
+
+            val w2 = Word(1, "Jones Mbindyo")
+            wordDao.insert(w2)
         }
     }
 }
