@@ -53,24 +53,11 @@ abstract class WordRoomDatabase : RoomDatabase() {
      * - Gets a CoroutineScope as constructor parameter & override the onCreate method to populate the database.
      * - Add the callback to the database build sequence right before calling .build() on the Room.databaseBuilder()
      */
-    class WordDatabaseCallback(private val scope: CoroutineScope) : RoomDatabase.Callback() {
+    class WordDatabaseCallback(private val scope: CoroutineScope) : Callback() {
 
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
-            INSTANCE?.let { database ->
-                scope.launch {
-                    populateDatabase(database.wordDao())
-                }
-            }
-        }
-
-        private suspend fun populateDatabase(wordDao: WordDao) {
-            // delete content
-            wordDao.deleteAll()
-
-            // Add sample words.
-            val w = Word(1, "Jones Mbindyo")
-            wordDao.insert(w)
+            INSTANCE?.let { _ -> scope.launch {} }
         }
     }
 }
