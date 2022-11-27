@@ -17,7 +17,7 @@ import com.intoverflown.roomword.vm.WordViewModelFactory
 
 class MainActivity : AppCompatActivity() {
 
-    private var binding : ActivityMainBinding? = null
+    private lateinit var binding : ActivityMainBinding
 
 
     /**
@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding!!.root)
+        setContentView(binding.root)
 
         /**
          * Step 8. Add a RecyclerView
@@ -40,8 +40,8 @@ class MainActivity : AppCompatActivity() {
          * - The ViewHolder inside WordListAdapter will display each word in our list.
          */
         val adapter = WordListAdapter()
-        binding!!.recyclerview.adapter = adapter
-        binding!!.recyclerview.layoutManager = LinearLayoutManager(this)
+        binding.recyclerview.adapter = adapter
+        binding.recyclerview.layoutManager = LinearLayoutManager(this)
 
         /**
          * 12.1 Connect with the data: Add an observer on the LiveData returned by getAlphabetizedWords.
@@ -52,8 +52,22 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Call add New word Activity
-        binding!!.fab.setOnClickListener {
+        binding.fab.setOnClickListener {
             addNewWordForResult.launch(Intent(this@MainActivity, NewWordActivity::class.java))
+        }
+
+        // delete all
+        binding.deleteAllItems.setOnClickListener {
+            deleteAll()
+        }
+    }
+
+    private fun deleteAll() {
+        try {
+            // delete content
+           wordViewModel.deleteAllItems()
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
@@ -67,7 +81,7 @@ class MainActivity : AppCompatActivity() {
             result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.getStringExtra(NewWordActivity.EXTRA_REPLY)?.let {
-                val word = Word(0, it)
+                val word = Word(null, it)
                 wordViewModel.insert(word)
             }
         } else {
