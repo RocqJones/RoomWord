@@ -37,8 +37,9 @@ abstract class WordRoomDatabase : RoomDatabase() {
                     context.applicationContext,
                     WordRoomDatabase::class.java,
                     "word_database"
-                ).addCallback(WordDatabaseCallback(scope))
-                    .build()
+                ).fallbackToDestructiveMigration().addCallback(
+                    WordDatabaseCallback(scope)
+                ).build() // fallbackToDestructiveMigration replaces the db if there is conflict
 
                 INSTANCE = instance
 
